@@ -20,6 +20,15 @@ Copy the `.env.example` file to `.env`:
 cp .env.example .env
 ```
 
+Run in windows:
+You can use XAMPP or alternatives for web server.
+
+After installation run this
+
+```bash
+php artisan serve
+```
+
 Run the sail:
 
 ```bash

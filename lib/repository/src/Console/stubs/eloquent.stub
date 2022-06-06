@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespaceModel }};
+use Fabrikod\Repository\Eloquent\BaseRepository;
+use Illuminate\Database\Eloquent\Builder;
+
+class {{ class }} extends BaseRepository implements {{ interfaceName }}
+{
+    /**
+     * @inheritDoc
+     */
+    public function query(): Builder
+    {
+        return {{ model }}::query();
+    }
+
+    /**
+     * Boot up the repository, pushing criteria
+     */
+    public function boot()
+    {
+        //
+    }
+
+}

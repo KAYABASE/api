@@ -1,0 +1,46 @@
+{
+    "name": "fabrikod/laravel-passport-cache-token",
+    "description": "Make laravel/passport token cacheable.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yusuf Kaya",
+            "email": "yusuf.kaya.x0@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "laravel/passport": "^10.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.21",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fabrikod\\LaravelPassportCacheToken\\": "./src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "./tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fabrikod\\LaravelPassportCacheToken\\CacheTokenServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

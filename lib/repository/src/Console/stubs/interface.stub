@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use Fabrikod\Repository\Contracts\Repository;
+
+interface {{ class }} extends Repository
+{
+    //
+}

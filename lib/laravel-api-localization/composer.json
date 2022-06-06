@@ -1,0 +1,51 @@
+{
+    "name": "fabrikod/laravel-api-localization",
+    "description": "Laravel API localization",
+    "keywords": [
+        "fabrikod",
+        "laravel",
+        "api",
+        "localization"
+    ],
+    "homepage": "https://github.com/fabrikod/laravel-api-localization",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yusuf Kaya",
+            "email": "yusuf.kaya.x0@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^8.37"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fabrikod\\ApiLocalization\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fabrikod\\ApiLocalization\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit --no-coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fabrikod\\ApiLocalization\\ApiLocalizationServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

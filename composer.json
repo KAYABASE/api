@@ -1,24 +1,69 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Kayabase project new main api.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*",
+        "babenkoivan/scout-elasticsearch-driver": "^4.3",
+        "barryvdh/laravel-dompdf": "^1.0",
+        "cviebrock/eloquent-sluggable": "^8.0",
+        "fabrikod/laravel-api-localization": "*",
+        "fabrikod/laravel-passport-cache-token": "*",
+        "fabrikod/laravel-repository": "*",
+        "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.75",
-        "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/framework": "^8.12",
+        "laravel/passport": "^10.1",
+        "laravel/sail": "^1.10",
+        "laravel/scout": "^8.0",
+        "laravel/telescope": "^4.4",
+        "laravel/tinker": "^2.5",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "lorisleiva/laravel-actions": "^2.1",
+        "orchestra/parser": "^6.0",
+        "overtrue/laravel-favorite": "^4.0",
+        "propaganistas/laravel-phone": "^4.3",
+        "sentry/sentry-laravel": "^2.9",
+        "spatie/laravel-activitylog": "^4.1",
+        "spatie/laravel-enum": "^2.2",
+        "spatie/laravel-medialibrary": "^9.0.0",
+        "spatie/laravel-permission": "^5.1",
+        "spatie/laravel-query-builder": "^3.6",
+        "spatie/laravel-settings": "^2.1",
+        "spatie/laravel-sluggable": "^3.1",
+        "spatie/laravel-translatable": "^5.0",
+        "stancl/tenancy": "^3.4"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
+        "brianium/paratest": "^6.3",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.13",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.3.3"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/telescope"
+            ]
+        }
     },
     "autoload": {
         "psr-4": {
@@ -32,13 +77,12 @@
             "Tests\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -47,16 +91,10 @@
             "@php artisan key:generate --ansi"
         ]
     },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./lib/**"
         }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    ]
 }

@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+use Fabrikod\Repository\Contracts\Filter;
+use Illuminate\Database\Eloquent\Builder;
+use Fabrikod\Repository\Contracts\Repository;
+
+class {{ class }} implements Filter
+{
+    /**
+     * @inheritDoc
+     */
+    public function apply(Builder $query, Repository $repository)
+    {
+        return $query;
+    }
+}

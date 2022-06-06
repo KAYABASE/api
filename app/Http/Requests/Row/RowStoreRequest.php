@@ -28,7 +28,7 @@ class RowStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $table = Table::findOrFail($this->route('table'));
+        $table = $this->route('table');
         return [
             'values' => ['required', 'array'],
             'values.*.column_id' => ['required', 'integer', 'exists:columns,id,deleted_at,NULL'],

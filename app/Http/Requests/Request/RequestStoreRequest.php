@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Row;
+namespace App\Http\Requests\Request;
 
+use App\Models\Request;
 use App\Models\Table;
-use App\Rules\CheckValueRule;
+use App\Rules\FilterDuplicateRule;
+use App\Rules\RequestFilterRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
-class RowUpdateRequest extends FormRequest
+class RequestStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +18,7 @@ class RowUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Gate::allows('create', Request::class);
     }
 
     /**
@@ -27,9 +30,7 @@ class RowUpdateRequest extends FormRequest
     {
         $table = $this->route('table');
         return [
-            'values' => ['required', 'array'],
-            'values.*.column_id' => ['required', 'integer', 'exists:columns,id,deleted_at,NULL'],
-            'values.*.value' => ["required_unless:values.*.value,$table->auto_increment", 'string', 'max:255', new CheckValueRule()],
+            'filter' => ['array', 'required', new RequestFilterRule($table)],
         ];
     }
 }

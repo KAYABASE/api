@@ -28,4 +28,9 @@ class Table extends BaseModel
     {
         return $this->hasMany(Row::class);
     }
+
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
 }

@@ -116,8 +116,8 @@ class DatabaseController extends Controller
     public function destroy($id)
     {
         $this->authorize('delete', [Database::class, Table::class, Column::class]);
-        $this->repository->findOrFail($id)->delete();
-
+        $database = $this->repository->findOrFail($id);
+        $database->delete();
         return response()->json(null, 204);
     }
 

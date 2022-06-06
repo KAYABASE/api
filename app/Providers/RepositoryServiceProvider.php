@@ -12,6 +12,7 @@ use App\Repositories\User\{
 };
 use App\Repositories\Database\{DatabaseRepository, DatabaseRepositoryEloquent};
 use App\Repositories\Table\{TableRepository, TableRepositoryEloquent};
+use App\Repositories\Row\{RowRepository, RowRepositoryEloquent};
 use App\Repositories\Column\{ColumnRepository, ColumnRepositoryEloquent};
 use App\Repositories\Value\{ValueRepository, ValueRepositoryEloquent};
 use App\Repositories\Request\{RequestRepository, RequestRepositoryEloquent};
@@ -29,6 +30,7 @@ class RepositoryServiceProvider extends ServiceProvider
         UserRepository::class => UserRepositoryEloquent::class,
         DatabaseRepository::class => DatabaseRepositoryEloquent::class,
         TableRepository::class => TableRepositoryEloquent::class,
+        RowRepository::class => RowRepositoryEloquent::class,
         ColumnRepository::class => ColumnRepositoryEloquent::class,
         ValueRepository::class => ValueRepositoryEloquent::class,
         RequestRepository::class => RequestRepositoryEloquent::class,

@@ -17,7 +17,8 @@ use Illuminate\Support\Arr;
 
 class ColumnController extends Controller
 {
-    protected array $defaultRelationships = ['column', 'column.table'];
+    protected array $defaultRelationships = ['table'];
+    protected array $allowedRelationships = ['values'];
 
     /**
      * @var ColumnRepository

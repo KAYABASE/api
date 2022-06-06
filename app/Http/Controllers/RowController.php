@@ -9,10 +9,20 @@ use App\Http\Resources\RowResource;
 use App\Models\Row;
 use App\Models\Table;
 use App\Models\Value;
+use App\Repositories\Row\RowRepository;
+use App\Repositories\Value\ValueRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RowController extends Controller
 {
+    protected array $defaultRelationships = ['values', 'values.column'];
+
+    public function __construct(public RowRepository $repository, public ValueRepository $valueRepository)
+    {
+        $this->panelMiddleware();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,22 +48,28 @@ class RowController extends Controller
      */
     public function store(Table $table, RowStoreRequest $request)
     {
-        $requestBody = $request->validated();
-        $resource = $table->rows()->create($requestBody);
+        return DB::transaction(function () use ($table, $request) {
+            $requestBody = $request->validated();
+            $resource = $table->rows()->create($requestBody);
 
-        foreach ($requestBody['values'] as $item) {
-            Value::create($item);
-        }
-
-        foreach ($table->columns as $column) {
-            if (Value::where('column_id', $column->id)->where('row_id', $resource->id)->count() === 0) {
-                Value::create([
+            foreach ($requestBody['values'] as $item) {
+                Value::create(array_merge($item, [
                     'row_id' => $resource->id,
-                    'column_id' => $column->id,
-                    'value' => null
-                ]);
+                ]));
             }
-        }
+
+            foreach ($table->columns()->get() as $column) {
+                if (Value::where('column_id', $column->id)->where('row_id', $resource->id)->count() === 0) {
+                    Value::create([
+                        'row_id' => $resource->id,
+                        'column_id' => $column->id,
+                        'value' => null
+                    ]);
+                }
+            }
+
+            return RowResource::make($resource->load($this->defaultRelationships));
+        });
     }
 
     /**
@@ -80,20 +96,10 @@ class RowController extends Controller
     public function update(Table $table, RowUpdateRequest $request, $id)
     {
         $requestBody = $request->validated();
-        $resource = $table->rows()->update($requestBody);
+        $resource = $this->repository->update($requestBody, $id);
 
-        foreach ($requestBody['values'] as $item) {
-            Value::create($item);
-        }
-
-        foreach ($table->columns as $column) {
-            if (Value::where('column_id', $column->id)->where('row_id', $resource->id)->count() === 0) {
-                Value::create([
-                    'row_id' => $resource->id,
-                    'column_id' => $column->id,
-                    'value' => null
-                ]);
-            }
+        if (@$requestBody['values'] && count(@$requestBody['values']) > 0) {
+            $this->valueRepository->updateMany($requestBody['values']);
         }
     }
 
@@ -103,10 +109,12 @@ class RowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Table $table, $id)
     {
         $this->authorize('delete', Row::class);
-        $this->repository->findOrFail($id)->delete();
+        $row = $this->repository->findOrFail($id);
+        $row->values()->delete();
+        $row->delete();
 
         return response()->json(null, 204);
     }

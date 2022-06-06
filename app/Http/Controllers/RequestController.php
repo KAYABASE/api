@@ -37,7 +37,8 @@ class RequestController extends Controller
      */
     public function store(Table $table, RequestStoreRequest $request)
     {
-        $_request = Request::where('filter', json_encode($request->get('filter')['ids']))->where('table_id', $table->id)->first();
+        $requestBody = $request->validated();
+        $_request = Request::where('filter', json_encode($requestBody('filter')['ids']))->where('table_id', $table->id)->first();
         if ($_request) {
             return RequestResource::make($_request);
         }
@@ -46,7 +47,7 @@ class RequestController extends Controller
         $_request = Request::create([
             'table_id' => $table->id,
             'query' => $query,
-            'filter' => json_encode($_request->filter['ids']),
+            'filter' => json_encode($requestBody('filter')['ids']),
         ]);
         return RequestResource::make($_request);
     }

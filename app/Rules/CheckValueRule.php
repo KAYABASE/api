@@ -85,10 +85,10 @@ class CheckValueRule implements Rule
             return is_string($value);
         } else if ($this->column->type == 'integer') {
             $this->message = "ERROR (SQL): The value type is must be an integer.";
-            return is_integer(intVal($value));
+            return intVal($value) != 0;
         } else if ($this->column->type == 'decimal') {
             $this->message = "ERROR (SQL): The value type is must be a numeric.";
-            return is_numeric(floatVal($value));
+            return floatVal($value) != 0;
         } else if ($this->column->type == 'bool') {
             $this->message = "ERROR (SQL): The value type is must be a boolean.";
             return is_bool(boolVal($value));

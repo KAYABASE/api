@@ -5,6 +5,7 @@ namespace App\Repositories\Value;
 use App\Enums\ValueType;
 use App\Models\Column;
 use App\Models\Value;
+use App\Traits\SendsApiResponse;
 use Fabrikod\Repository\Eloquent\BaseRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,6 +14,8 @@ use Illuminate\Pagination\Paginator;
 
 class ValueRepositoryEloquent extends BaseRepository implements ValueRepository
 {
+    use SendsApiResponse;
+
     /**
      * @inheritDoc
      */
@@ -75,5 +78,16 @@ class ValueRepositoryEloquent extends BaseRepository implements ValueRepository
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
+    public function updateMany($values)
+    {
+        if (count($values) == 0 || !$values) {
+            return $this->error('No values provided');
+        }
+
+        foreach ($values as $value) {
+            $this->update($value['value'], $value['id']);
+        }
     }
 }

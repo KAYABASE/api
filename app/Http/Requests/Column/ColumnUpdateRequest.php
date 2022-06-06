@@ -29,7 +29,7 @@ class ColumnUpdateRequest extends FormRequest
             'name' => ['sometimes', 'string', 'max:255'],
             'type' => ['sometimes', 'string', 'max:255'],
             'length' => ['nullable', 'integer'],
-            'default' => ['nullable', 'boolean'],
+            'default' => ['nullable', 'string'],
             'nullable' => ['nullable', 'boolean'],
             'unique' => ['nullable', 'boolean'],
             'auto_increment' => ['nullable', 'boolean'],

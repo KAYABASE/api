@@ -60,7 +60,7 @@ class TableController extends Controller
 
             $table = $this->repository->create(Arr::only($requestBody, ['name', 'database_id']));
             if (@$requestBody['columns'] && count(@$requestBody['columns']) > 0) {
-                $this->columnRepository->createMany(Arr::only($requestBody, ['columns']), $table);
+                $this->columnRepository->createMany($table->id, Arr::only($requestBody, ['columns']));
             }
 
             return TableResource::make($table->load($this->defaultRelationships));
@@ -90,14 +90,14 @@ class TableController extends Controller
      */
     public function update(TableUpdateRequest $request, $id)
     {
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request, $id) {
             $requestBody = $request->validated();
             $this->authorize('update', [Table::class, Column::class]);
             $table = $this->repository->findOrFail($id);
 
             $table->update(Arr::only($requestBody, ['name']));
             if (@$requestBody['columns'] && count(@$requestBody['columns']) > 0) {
-                $this->columnRepository->updateMany($requestBody['columns']);
+                $this->columnRepository->updateMany($table->id, $requestBody['columns']);
             }
 
             return TableResource::make($table->load($this->defaultRelationships));

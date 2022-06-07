@@ -93,7 +93,7 @@ class DatabaseController extends Controller
      */
     public function update(DatabaseUpdateRequest $request, $id)
     {
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request, $id) {
             $requestBody = $request->validated();
             $this->authorize('update', [Database::class, Table::class, Column::class]);
             $database = $this->repository->findOrFail($id);

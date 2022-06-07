@@ -9,9 +9,15 @@ use App\Models\Column;
 use App\Models\Request;
 use App\Models\Table;
 use App\Models\Value;
+use App\Repositories\Request\RequestRepository;
 
 class RequestController extends Controller
 {
+    public function __construct(public RequestRepository $repository)
+    {
+        $this->panelMiddleware();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +46,7 @@ class RequestController extends Controller
         $requestBody = $request->validated();
         $_request = Request::where('filter', json_encode($requestBody('filter')['ids']))->where('table_id', $table->id)->first();
         if ($_request) {
-            return RequestResource::make($_request);
+            return $_request;
         }
 
         $query = uniqid();
@@ -49,7 +55,7 @@ class RequestController extends Controller
             'query' => $query,
             'filter' => json_encode($requestBody('filter')['ids']),
         ]);
-        return RequestResource::make($_request);
+        return $_request;
     }
 
     /**

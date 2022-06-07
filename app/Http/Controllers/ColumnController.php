@@ -110,10 +110,12 @@ class ColumnController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Table $table, $id)
     {
         $this->authorize('delete', Column::class);
-        $this->repository->findOrFail($id)->delete();
+        $column = $this->repository->findOrFail($id);
+        $column->values()->delete();
+        $column->delete();
 
         return response()->json(null, 204);
     }

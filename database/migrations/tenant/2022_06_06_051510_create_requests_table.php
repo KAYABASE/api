@@ -16,7 +16,7 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('table_id')->nullable()->constrained('tables')->cascadeOnDelete();
-            $table->json('filter');
+            $table->json('filter')->nullable();
             $table->string('query');
             $table->timestamps();
         });

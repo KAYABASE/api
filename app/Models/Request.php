@@ -10,9 +10,11 @@ class Request extends Model
     use HasFactory;
 
     protected $fillable = [
+        'method',
         'table_id',
         'query',
         'filter',
+        'payload',
     ];
 
     public function table()

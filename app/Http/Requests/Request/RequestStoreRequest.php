@@ -30,7 +30,8 @@ class RequestStoreRequest extends FormRequest
     {
         $table = $this->route('table');
         return [
-            'filter' => ['array', 'required', new RequestFilterRule($table)],
+            'method' => ['required', 'string', 'in:GET,POST,PUT,DESTROY'],
+            'filter' => ['array', 'nullable', new RequestFilterRule($table)],
         ];
     }
 }

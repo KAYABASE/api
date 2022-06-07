@@ -32,4 +32,16 @@ class RowUpdateRequest extends FormRequest
             'values.*.value' => ["required_unless:values.*.value,$table->auto_increment", 'string', 'max:255', new CheckValueRule()],
         ];
     }
+
+    public static function payload()
+    {
+        return '{
+            "values": [
+                {
+                    "column_id": 1,
+                    "value": "ABC"
+                }
+            ]
+        }';
+    }
 }

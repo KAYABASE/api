@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Requests\Row\RowStoreRequest;
+use App\Http\Requests\Row\RowUpdateRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RequestResource extends JsonResource
@@ -19,6 +21,8 @@ class RequestResource extends JsonResource
             'query' => $this->query,
             'filter' => json_decode($this->filter, true),
             'url' => env("APP_URL") . "/api/requests/{$this->query}",
+            'method' => $this->method,
+            'payload' => $this->method == 'POST' ? RowStoreRequest::payload() : ($this->method == 'PUT' ? RowUpdateRequest::payload() : null),
         ];
     }
 }

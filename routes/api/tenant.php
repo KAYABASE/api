@@ -37,6 +37,6 @@ Route::middleware([
         'values' => ValueController::class,
     ]);
 
-    Route::post('tables/{table}/requests', [RequestController::class, 'store']);
+    Route::post('tables/{table}/requests', [RequestController::class, 'request']);
     Route::get('requests/{query}', [RequestController::class, 'show']);
 });

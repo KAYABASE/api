@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Request\RequestStoreRequest;
 use App\Http\Requests\Request\RequestUpdateRequest;
+use App\Http\Requests\Row\RowStoreRequest;
 use App\Http\Resources\RequestResource;
 use App\Models\Column;
 use App\Models\Request;
+use App\Models\Row;
 use App\Models\Table;
 use App\Models\Value;
 use App\Repositories\Request\RequestRepository;
@@ -25,7 +27,7 @@ class RequestController extends Controller
      */
     public function show($query)
     {
-        $request = Request::where('query', $query)->firstOrFail();
+        $request = Request::where('query', $query)->where('method', 'GET')->firstOrFail();
         $column_ids = json_decode($request->filter, true);
         $rows = $request->table->rows()->get();
 
@@ -41,21 +43,50 @@ class RequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Table $table, RequestStoreRequest $request)
+    public function store($query, RowStoreRequest $request)
     {
         $requestBody = $request->validated();
-        $_request = Request::where('filter', json_encode($requestBody('filter')['ids']))->where('table_id', $table->id)->first();
-        if ($_request) {
-            return $_request;
+        $request = Request::where('query', $query)->where('method', 'POST')->firstOrFail();
+        
+        $row = Row::create([
+            'table_id' => $request->table->id
+        ]);
+
+        foreach ($requestBody['values'] as $value) {
+            Value::create([
+                'row_id' => $row->id,
+                'column_id' => $value['column_id'],
+                'value' => $value['value']
+            ]);
         }
 
-        $query = uniqid();
-        $_request = Request::create([
-            'table_id' => $table->id,
+        $request = $this->repository->create(array_merge($requestBody, [
             'query' => $query,
-            'filter' => json_encode($requestBody('filter')['ids']),
-        ]);
-        return $_request;
+            'method' => 'GET'
+        ]));
+
+        return new RequestResource($request);
+    }
+    
+    public function request(Table $table, RequestStoreRequest $request)
+    {
+        $requestBody = $request->validated();
+        switch ($requestBody['method']) {
+            case 'GET':
+                $show = $this->repository->makeShowEp($table, $request);
+                return new RequestResource($show);
+            case 'POST':
+                $store = $this->repository->makeStoreEp($table, $request);
+                return new RequestResource($store);
+            case 'PUT':
+                $update = $this->repository->makeUpdateEp($table, $request);
+                return new RequestResource($update);
+            case 'DESTROY':
+                $destroy = $this->repository->makeDestroyEp($table, $request);
+                return new RequestResource($destroy);
+            default:
+                return response()->json(['message' => 'Method not allowed'], 405);
+        }
     }
 
     /**
